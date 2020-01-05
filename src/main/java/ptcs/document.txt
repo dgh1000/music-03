@@ -1,0 +1,105 @@
+
+Dec 19
+
+  - Plan: Get something working. What are some things I can do?
+    - generate fragments
+      - purely randomly to start
+    - play a Comp
+      - Java MIDI: 
+        - MidiDevice interface includes physical ports. need to try making
+          a note out of it
+    - analyze a comp (produce Ranges score)
+    - nearest neighbor method of comparison
+
+    Start developing database. This will take serialization. Need to lay out regions.
+    We find lowest and highest pitch, maybe. Maybe fixed regions for now. 
+    maybe 1.5 octave dvisions, or 1 octave middle C to C above, or 14th
+    maybe A to Eb above. 1.5 second divisions with anything beyond.
+
+
+Compare two fragments F1 and F2.
+  - We divide them into N_r regions of pitch and time. Some of them are overlapping.
+    Compare the pitch class sets present in each region and the repetitions
+  - Move from largest to smaller sets. Score positive points for any sets
+    in both fragments with increasing score for matching repetitions, negative 
+    points for sets in one but not the other. 
+
+Is there a way to test by generating vector?
+  - how many points would it contain? how many PCSs are there with 6 pitches
+    or less? Something like 1000? How many sections do we need to divide
+    the fragment into? Something like 6? That would be 6000 numbers. How
+    do we need to compare them? Not every number would be compared the same
+    way. Worth pre-computing the good and bad examples anyway.
+
+What can I get started with now?
+  - pre-analyze good and bad. Do comparison. Start by producing PcsScore for
+    every possible PcsI. Where should I do this (what class)?
+
+Test a fragment against a database:
+  - use algorithm for comparing. if its close to any bad, it's bad. if it's
+    not close to anything, skip or present to listener. if it's close to good,
+    decide it's good
+
+Pruning for comparison with database:
+  - stop after first strong-enough match to bad. stop after strong-enough comparison
+    to good. whenever a fragment is used as stopping point, move closer to top
+  - test on random fragments. see if the good/bad examples cluster frequently
+
+Compose new fragment
+  - generative algorithm which includes patterns in pitch and register but has
+    some uncertain elemenets or ways to generate a set of N patterns, where N
+    is <= 100,000 or so. Generate many such patterns and test. Find best set
+    and present as alternatives to listener.
+
+Build database of fragments
+  - two kinds of databases: general, and specific to generation method
+  - general database might just be joining of all specific databases
+  - we have an initial database D. We compose a random fragment R and 
+    present it to the listener to categorize. 
+    
+
+Note: has 'tOn', 'tOff', and 'pitch' all public. 
+   - also has compareTo and toString
+
+Comp: 
+   public Set<Note> notes
+     
+   addNote(Note n) , containsNote(Note n), 
+   extractRange(int minPit, int maxPit, double minTime, double maxTime)
+
+PcsLibrary:
+    PcsLibrary(int maxN)
+    public PcsI lookup(PcsI in)
+    analyzeComp(Comp in) <- coding in progress
+
+PcsL:
+    protected data: Set<Integer> pcs
+    PcsL(int [] ps)
+    PcsL(List<Integer> ps)
+    Set<Integer> getPcs()
+    static public List<PcsL> genAllWithN(int n)
+
+PcsI:
+    protected data: int bits
+    PcsI(PscI in)
+    PcsI(PcsL p)
+    PcsI (List<Integer)
+    PcsI(int bits)
+    public PcsL toPcsL()
+    PcsI rotateLeft()
+    PcsI normalize()
+    public int compareTo(PcsI other)
+
+PcsScore
+ 
+  PcsScore(PcsI, int nRepetitions)
+  PcsI getNormPcs()
+  int getNRepetitions
+  
+RegionScore
+
+  PcsScore for every possible PcsI
+
+NumberSets
+  List<List<Integer>> allSubsets(List<Integer> inputList)
+  List<List<Integer>> allSubsetsfilterSize(inputList, minN, maxN)
