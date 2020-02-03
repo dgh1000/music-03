@@ -1,4 +1,4 @@
-package ptcs.core;
+package ptcs.pcs;
 
 import java.util.*;
 import java.util.stream.Collectors;

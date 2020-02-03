@@ -1,4 +1,4 @@
-package ptcs.core;
+package ptcs.pcs;
 public class PcsScore {
 
     private PcsI normPcs;

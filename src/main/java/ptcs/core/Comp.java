@@ -1,8 +1,12 @@
 package ptcs.core;
 
+import ptcs.core.*;
+import ptcs.pcs.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.sound.midi.*;
+
+import org.apache.commons.math3.fraction.Fraction;
 
 
 /** should we go to processing now. extract notes covering a 
@@ -35,8 +39,8 @@ public class Comp {
     }
 
     public Comp extractRange(
-        int minPit, int maxPit, double minTime, double maxTime) {
-        
+        int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
+    {    
         Set<Note> out = new TreeSet<>();
         for (Note n: notes) {
             if (Comp.noteMatchesRange(
@@ -56,27 +60,16 @@ public class Comp {
         // |   |
         //         |      |
         //     | |
-        Note n, int minPit, int maxPit, double minTime, double maxTime) {
-        boolean beginInRange = minTime < n.tOn && n.tOn < maxTime;
-        boolean endInRange = minTime < n.tOff && n.tOff < maxTime;
+        Note n, int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
+    {
+        int c1 = minTime.compareTo(n.tOn);
+        int c2 = n.tOn.compareTo(maxTime);
+        int c3 = minTime.compareTo(n.tOff);
+        int c4 = n.tOff.compareTo(maxTime);
+        boolean beginInRange = c1 < 0 && c2 < 0;
+        boolean endInRange = c3 < 0 && c4 < 0;
         return n.pitch >= minPit && n.pitch <= maxPit
             && (beginInRange || endInRange);
-    }
-
-    static public Comp randomComp(
-        int nNotes, int minPitch, int maxPitch, double tMin, double tMax,
-        Random rand) {
-
-        Comp c = new Comp();
-        double minDur = (tMax - tMin)/15.0;
-        double maxDur = (tMax - tMin)/4.0;
-
-        for (int i = 0; i < nNotes; i++) {
-            Note n = Note.random(
-                tMin, tMax, minDur, maxDur, minPitch, maxPitch, rand);
-            c.addNote(n);
-        }
-        return c;
     }
 
     public String toUsefulString() {
@@ -109,9 +102,11 @@ public class Comp {
     }
 
     static protected boolean notesOverlap(Note n1, Note n2) {
-        if (n1.pitch != n2.pitch) {
+        if (n1.pitch != n2.pitch) 
+        {
             return false;
-        } else if (n1.tOff <= n2.tOn || n2.tOff <= n1.tOn) {
+        } else if (n1.tOff.compareTo(n1.tOn) <= 0 || n2.tOff.compareTo(n1.tOn) <= 0) 
+        {
             return false;
         }
         return true;
@@ -139,20 +134,27 @@ public class Comp {
         notes = new TreeSet<>(ns);
     }
 
-    public double tOnMin() {
-        double t = Double.POSITIVE_INFINITY;
-        for (Note n: notes) {
-            if (n.tOn < t)
-                t = n.tOn;
+    public Fraction tOnMin() {
+        List<Note> ns = new ArrayList<>(notes);
+        assert (ns.size() > 0);
+        Fraction t = ns.get(0).tOn;
+        for (int i = 1; i < ns.size(); i++) 
+        {
+            Note nt = ns.get(i);
+            if (nt.tOn.compareTo(t) < 0)
+                t = nt.tOn;
         }
         return t;
     }
 
-    public double tOffMax() {
-        double t = Double.NEGATIVE_INFINITY;
-        for (Note n: notes) {
-            if (n.tOff > t)
-                t = n.tOff;
+    public Fraction tOffMax() {
+        List<Note> ns = new ArrayList<>(notes);
+        assert (ns.size() > 0);
+        Fraction t = ns.get(0).tOff;
+        for (int i = 1; i < ns.size(); i++) {
+            Note nt = ns.get(i);
+            if (nt.tOff.compareTo(t) > 0)
+                t = nt.tOff;
         }
         return t;
     }

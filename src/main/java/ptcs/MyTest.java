@@ -6,7 +6,10 @@ import java.util.*;
 import java.util.stream.*;
 
 import ptcs.core.*;
+import ptcs.pcs.*;
 import ptcs.util.*;
+import ptcs.gen.RandomComp;
+import org.apache.commons.math3.fraction.*;
 
 public class MyTest {
 
@@ -22,7 +25,7 @@ public class MyTest {
 
     static public void testRandomComp() {
         Random r = new Random();
-        Comp c2 = Comp.randomComp(10, 30, 80, 0, 10, r);
+        Comp c2 = RandomComp.randomComp(10, 30, 80, new Fraction(0), new Fraction(10), r);
         System.out.println(c2.toUsefulString());
     }
 

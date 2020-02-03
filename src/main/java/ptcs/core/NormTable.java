@@ -1,5 +1,6 @@
 package ptcs.core;
 
+import ptcs.pcs.*;
 import java.util.*;
 
 public class NormTable {

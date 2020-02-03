@@ -1,70 +1,17 @@
 package ptcs.core;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
+import ptcs.pcs.*;
+import ptcs.util.*;
 
-import ptcs.util.NumberSets;
-
-public class PcsLibrary {
-    Map<PcsI,PcsI> map;
-
-    public PcsLibrary(int maxN) {
-        map = new TreeMap<>();
-        for (int i = 2; i <= maxN; i++) {
-            createEntriesForSizeN(i);
-        }
-        Set<PcsI> distinct = new TreeSet<>(map.values());
-        System.out.println(distinct.size());
-    }
-
-    void createEntriesForSizeN(int n) {
-        List<PcsL> l = PcsL.genAllWithN(n);
-        for (PcsL p: l) {
-            PcsI i = new PcsI(p);
-            PcsI i2 = i.normalize();
-            map.put(i, i2);
-        }
-
-    }
-    
-    public PcsI lookup(PcsI inx) {
-        assert(map.containsKey(inx));
-        return map.get(inx);
-    }
-    
-    public boolean containsKey(PcsI inx) {
-        return map.containsKey(inx);
-    }
-
-    @Override
-    public String toString() {
-        String out = "";
-        out += "size: " + map.size();
-        List<PcsI> ks = new ArrayList<>(map.keySet());
-        for (int i = 0; i < 10; i++) {
-            out += ks.get(i) + " " + map.get(ks.get(i)) + '\n';
-        }
-        return out;
-    }
-
-    static public Set<PcsI> createTestSet(int n) {
-        Set<PcsI> s = new TreeSet<>();
-        for (int i = 2; i <= n; i++) {
-            List<PcsL> all = PcsL.genAllWithN(i);
-            System.out.println("i: " + i + " all size: " + all.size());
-            for (PcsL one: all) {
-                s.add(new PcsI(one));
-            }
-            System.out.println("Set size: " + s.size());
-        }
-        return s;
-    }
+public class AnalyzeComp {
 
     static public boolean sizeInRange(List<Integer> ls) {
         return ls.size() >= 2 && ls.size() <= 6;
     }
 
-    public Map<PcsI,Double> analyzeComp(Comp in) {
+    static public Map<PcsI,Double> analyze(Comp in, PcsLibrary lib) {
         // find every subset of pitches from size 2 to 6. find and normalize pcs, 
         // add to score
         // 
@@ -99,7 +46,7 @@ public class PcsLibrary {
             .map(l -> new PcsI(l))
             .collect(Collectors.toList());
         List<PcsI> normPcsIs = pcsIs.stream()
-            .map(l -> lookup(l))
+            .map(l -> lib.lookup(l))
             .collect(Collectors.toList());
         // Find all unique PcsI among normalized
         Set<PcsI> pcsSet = new TreeSet<>(normPcsIs);
@@ -115,5 +62,4 @@ public class PcsLibrary {
         }
         return out;
     }
-
 }

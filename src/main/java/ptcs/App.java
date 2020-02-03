@@ -1,9 +1,13 @@
 package ptcs;
 import ptcs.core.*;
+import ptcs.*;
+import ptcs.pcs.*;
 import java.util.*;
+import ptcs.gen.*;
 import java.util.Map.*;
 import java.util.AbstractMap.*;
 import java.awt.Color;
+import org.apache.commons.math3.fraction.Fraction;
 /**
  * Hello world!
  * What now? Analyze a passage? export passage as MIDI? read a passage?
@@ -26,17 +30,26 @@ import java.awt.Color;
  *     various tests (PCs, random compositions)
  *   TestPcs
  *     test analysis
+ * 
+ *   We're not going to analyze comp any more. We're going to have rhythm generator, 
+ *   pitch generator, etc. all put together. interfaces
+ * 
  */
 public class App 
 {
     public static void main(String[] args) throws Exception {
-        testCompPlay();
+        Fraction f = new Fraction(1, 3);
+        Timing t = new Timing(new Fraction(1,3), new Fraction(4, 3));
+        Fraction f2 = new Fraction(10);
+        System.out.println(f.add(f2));
     }
 
     public static void testCompPlay() throws Exception
     {
         Random rand = new Random();
-        Comp c = Comp.randomComp(10, 20, 90, 0.0, 10.0, rand);
+        Comp c = RandomComp.randomComp(
+            10, 20, 90, new Fraction(0.0), new Fraction(10.0), rand
+        );
         System.out.println(c.toUsefulString());
         MidiApp.runWithComp(c);
         // TestPcs.testAnalyze();
@@ -49,10 +62,14 @@ public class App
         // MyTest.testRandomComp();
         MyPanel p = GsApp.createAndShowGUI();
         Random rand = new Random(100);
-        Comp c = Comp.randomComp(10, 30, 70, 0, 10, rand);
+        Comp c = RandomComp.randomComp(
+            10, 30, 70, new Fraction(0), new Fraction(10), rand
+        );
         double rangeT0 = 0;
         double rangeT1 = 5;
-        Comp c2 = c.extractRange(50, 70, rangeT0, rangeT1);
+        Comp c2 = c.extractRange(
+            50, 70, new Fraction(rangeT0, 0.001, 100), new Fraction(rangeT1, 0.001, 100)
+        );
         List<Entry<Comp,Color>> ls = new ArrayList<>();
         ls.add(new SimpleEntry<>(c, Color.red));
         ls.add(new SimpleEntry<>(c2, Color.black));
