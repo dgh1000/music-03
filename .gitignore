@@ -25,4 +25,5 @@ buildNumber.properties
 .classpath
 .project
 .vscode/
+!.vscode/tasks.json
 .editorconfig
