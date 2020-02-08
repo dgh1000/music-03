@@ -31,7 +31,7 @@
         {
             "label": "exec",
             "type": "shell",
-            "command": "mvn exec:java -Dexec.mainClass=\"ptcs.App\"",
+            "command": "mvn exec:java",
             "group": "test"
         }
     ]
