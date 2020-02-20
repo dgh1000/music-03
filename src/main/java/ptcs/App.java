@@ -1,6 +1,5 @@
 package ptcs;
 import ptcs.core.*;
-import ptcs.*;
 import ptcs.pcs.*;
 import java.util.*;
 import ptcs.gen.*;
@@ -38,10 +37,11 @@ import org.apache.commons.math3.fraction.Fraction;
 public class App 
 {
     public static void main(String[] args) throws Exception {
-        Fraction f = new Fraction(1, 3);
-        Timing t = new Timing(new Fraction(1,3), new Fraction(4, 3));
-        Fraction f2 = new Fraction(10);
-        System.out.println(f.add(f2));
+        // Fraction f = new Fraction(1, 3);
+        // Timing t = new Timing(new Fraction(1,3), new Fraction(4, 3));
+        // Fraction f2 = new Fraction(10);
+        // System.out.println(f.add(f2));
+        testCompPlay();
     }
 
     public static void testCompPlay() throws Exception
@@ -50,6 +50,7 @@ public class App
         Comp c = RandomComp.randomComp(
             10, 20, 90, new Fraction(0.0), new Fraction(10.0), rand
         );
+
         System.out.println(c.toUsefulString());
         MidiApp.runWithComp(c);
         // TestPcs.testAnalyze();

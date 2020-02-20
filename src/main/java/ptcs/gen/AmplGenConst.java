@@ -1,5 +1,8 @@
 package ptcs.gen;
+import ptcs.core.*;
 
-public AmplGenConst extends AmplGen {
-    
+public class AmplGenConst implements AmplGen {
+    public double next(Beat b) {
+        return 1;
+    }
 }

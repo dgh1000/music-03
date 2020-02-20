@@ -1,5 +1,7 @@
 package ptcs.gen;
 
+import ptcs.core.*;
+
 public interface AmplGen {
-    double next();
+    double next(Beat beat);
 }

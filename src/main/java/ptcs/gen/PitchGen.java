@@ -1,6 +1,8 @@
 
-package ptcs.core;
+package ptcs.gen;
+
+import ptcs.core.*;
 
 public interface PitchGen {
-    int[] nextPitchOptions();
+    int[] nextPitchOptions(Beat b);
 }

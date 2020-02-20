@@ -12,9 +12,9 @@ public class TestPcs {
         // okay so here we have to create a comp with certain
         // pitches. maybe take 
         int[] ps = {0, 1, 3, 6, 7};
-        Set<Note> ls = Arrays.stream(ps)
+        List<Note> ls = Arrays.stream(ps)
             .mapToObj(i -> new Note(new Fraction(0), new Fraction(1), i))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
         Comp c = new Comp(ls);
         PcsLibrary pl = new PcsLibrary(6);
         Map<PcsI,Double> m = AnalyzeComp.analyze(c, pl);

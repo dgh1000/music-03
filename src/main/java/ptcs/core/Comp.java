@@ -1,6 +1,5 @@
 package ptcs.core;
 
-import ptcs.core.*;
 import ptcs.pcs.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,17 +14,18 @@ import org.apache.commons.math3.fraction.Fraction;
 
 public class Comp {
     
-    public Set<Note> notes;
+    public ArrayList<Note> notes; 
 
     public Comp() {
-        notes = new TreeSet<>();
+        notes = new ArrayList<>();
     }
 
-    public Comp(Set<Note> notes) {
-        this.notes = notes;
+    public Comp(List<Note> notes) {
+        this.notes = new ArrayList<>(notes);
     }
 
     public boolean containsNote(Note n) {
+
         return notes.contains(n);
     }
 
@@ -41,10 +41,12 @@ public class Comp {
     public Comp extractRange(
         int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
     {    
-        Set<Note> out = new TreeSet<>();
-        for (Note n: notes) {
+        List<Note> out = new ArrayList<>();
+        for (Note n: notes) 
+        {
             if (Comp.noteMatchesRange(
-                n, minPit, maxPit, minTime, maxTime)) {
+                n, minPit, maxPit, minTime, maxTime)) 
+            {
                 out.add(n);
             }
         }
@@ -56,30 +58,41 @@ public class Comp {
     // }
 
     private static boolean noteMatchesRange(
-        //  |          |
-        // |   |
-        //         |      |
-        //     | |
         Note n, int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
     {
-        int c1 = minTime.compareTo(n.tOn);
-        int c2 = n.tOn.compareTo(maxTime);
-        int c3 = minTime.compareTo(n.tOff);
-        int c4 = n.tOff.compareTo(maxTime);
-        boolean beginInRange = c1 < 0 && c2 < 0;
-        boolean endInRange = c3 < 0 && c4 < 0;
+        boolean bbr = minTime
+          .compareTo(
+                     n.tOn
+          ) < 0;
+        boolean ber = n.tOn
+          .compareTo(
+                     maxTime
+          ) < 0;
+        boolean ebr = minTime
+          .compareTo(
+                     n.tOff
+          ) < 0;
+        boolean eer = n.tOff
+          .compareTo(
+                     maxTime
+          ) < 0;
+        boolean beginInRange = bbr && ber;
+        boolean endInRange = ebr && eer;
         return n.pitch >= minPit && n.pitch <= maxPit
             && (beginInRange || endInRange);
     }
 
-    public String toUsefulString() {
+    public String toUsefulString() 
+    {
         String s = "";
-        for (Note n: notes) {
+        for (Note n: notes) 
+        {
             s += n.toString() + "\n";
         }
         return s;
     }
 
+    /*
     // Determine if the given note overlaps one in the composition
     // and return a list of them.
     protected List<Note> overlappingList(Note n) {
@@ -101,6 +114,7 @@ public class Comp {
         return false;
     }
 
+    
     static protected boolean notesOverlap(Note n1, Note n2) {
         if (n1.pitch != n2.pitch) 
         {
@@ -133,7 +147,7 @@ public class Comp {
         }
         notes = new TreeSet<>(ns);
     }
-
+    */
     public Fraction tOnMin() {
         List<Note> ns = new ArrayList<>(notes);
         assert (ns.size() > 0);
