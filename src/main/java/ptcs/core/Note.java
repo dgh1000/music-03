@@ -44,20 +44,20 @@ public class Note implements Comparable<Note> {
         */
     }
 
-    public MyMidiNote[] toMyMidiNotes(long offset) 
+    public Raw[] toRaw(long offset) 
     {
         int idx = 0;
-        MyMidiNote[] msgs = new MyMidiNote[2];
+        Raw[] msgs = new Raw[2];
 
         try 
         {
             long[] ts = this.onOffTimestamps(offset);
             ShortMessage m1 = new ShortMessage();
             m1.setMessage(0x90, 1, this.pitch, 64);
-            MyMidiNote n1 = new MyMidiNote(m1, ts[0]);
+            Raw n1 = new Raw(m1, ts[0]);
             ShortMessage m2 = new ShortMessage();
             m2.setMessage(0x80, 1, this.pitch, 64);
-            MyMidiNote n2 = new MyMidiNote(m2, ts[1]);
+            Raw n2 = new Raw(m2, ts[1]);
             // make note on and note off
             msgs[idx++] = n1;
             msgs[idx++] = n2;

@@ -41,7 +41,7 @@ public class App
         // Timing t = new Timing(new Fraction(1,3), new Fraction(4, 3));
         // Fraction f2 = new Fraction(10);
         // System.out.println(f.add(f2));
-        testCompPlay();
+        MidiApp.test2();
     }
 
     public static void testCompPlay() throws Exception
@@ -52,7 +52,7 @@ public class App
         );
 
         System.out.println(c.toUsefulString());
-        MidiApp.runWithComp(c);
+        // MidiApp.runWithComp(c);
         // TestPcs.testAnalyze();
         System.exit(0);
     }

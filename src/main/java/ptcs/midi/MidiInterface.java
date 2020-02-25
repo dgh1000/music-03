@@ -9,12 +9,8 @@ public class MidiInterface
 {
     static MidiDevice midiDevice;
 
-    static void openMidiDevice() throws Exception
+    static public void openMidiDevice(String midiInputName) throws Exception
     {
-        Map<String, String> env = System.getenv();
-        String midiInputName = env.get("MMIDI");
-        if (midiInputName == null)
-            throw new Exception("the MMIDI env variable isn't defined");
 
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
         MidiDevice.Info theOne = null;
@@ -31,54 +27,35 @@ public class MidiInterface
                 midiDevice.open();
             else
                 System.out.println("Strange, MIDI device was already open");
-        
-                // Receiver r = d.getReceiver();
-                // long currentT = 0;
-                // for (MyMidiNote n : notesL) {
-                //     // what does -1 mean in send? send now?
-                //     // why are we sending now? why are we only creating
-                //     // 1 message? where is sending whole comp? Have
-                //     // we tested that yet?
-                //     long t = n.timestamp;
-                //     int ms = (int) ((double) (t - currentT) / 1000.0);
-                //     if (ms <= 0) {
-                //         r.send(n.msg, -1);
-                //     } else {
-                //         Thread.sleep(ms);
-                //         r.send(n.msg, -1);
-                //         currentT = t;
-                //     }
-                // }
-                // d.close();
             
         } catch (MidiUnavailableException e) {
-            System.out.println("midi unavailable xception");
+            System.out.println("midi unavailable exception");
         }
 
     }
 
-    static void closeMidiDevice() 
+    static public void closeMidiDevice() 
     {
         midiDevice.close();
     }
 
-    static void playNotes(List<Note> notes, long offset) 
+    static public void playNotes(List<Note> notes, List<Raw> other, long offset) 
     {
-        List<MyMidiNote> notesL = new ArrayList<>();
+        List<Raw> notesL = new ArrayList<>();
 
         for (Note n: notes) 
         {
-            MyMidiNote[] mns = n.toMyMidiNotes(offset);
+            Raw[] mns = n.toRaw(offset);
             notesL.add(mns[0]);
             notesL.add(mns[1]);
         }
-
+        notesL.addAll(other);
         Collections.sort(notesL);
 
         try {
             Receiver r = midiDevice.getReceiver();
             long currentT = 0;
-            for (MyMidiNote n : notesL) 
+            for (Raw n : notesL) 
             {
                 // what does -1 mean in send? send now?
                 // why are we sending now? why are we only creating
@@ -102,5 +79,13 @@ public class MidiInterface
             System.out.println("Playback interrupted");
         }
     }
+    static public void inspectDevices() 
+    {
+        System.out.println("Inspect the existing MIDI interfaces:");
+        MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+        for (MidiDevice.Info i : infos) {
+            System.out.println(i.getName());
 
+        }
+    }
 }
