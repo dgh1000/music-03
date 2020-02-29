@@ -13,7 +13,7 @@ public class TestPcs {
         // pitches. maybe take 
         int[] ps = {0, 1, 3, 6, 7};
         List<Note> ls = Arrays.stream(ps)
-            .mapToObj(i -> new Note(new Fraction(0), new Fraction(1), i))
+            .mapToObj(i -> new Note(0, 1000, i))
             .collect(Collectors.toList());
         Comp c = new Comp(ls);
         PcsLibrary pl = new PcsLibrary(6);
@@ -24,6 +24,6 @@ public class TestPcs {
     }
 
     public static Note mkTestNote(int pitch) {
-        return new Note(new Fraction(0), new Fraction(1), pitch);
+        return new Note(0, 1000, pitch);
     }
 }

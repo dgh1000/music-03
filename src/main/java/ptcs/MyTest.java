@@ -25,7 +25,7 @@ public class MyTest {
 
     static public void testRandomComp() {
         Random r = new Random();
-        Comp c2 = RandomComp.randomComp(10, 30, 80, new Fraction(0), new Fraction(10), r);
+        Comp c2 = RandomComp.randomComp(10, 30, 80, 0, 10 * 1000, r);
         System.out.println(c2.toUsefulString());
     }
 

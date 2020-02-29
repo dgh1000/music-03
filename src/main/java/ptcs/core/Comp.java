@@ -38,6 +38,13 @@ public class Comp {
         notes.add(n);
     }
 
+    public List<Note> getNotes() 
+    {
+        return notes;
+    }
+
+    /*
+          EVENTUALLY MOVE THIS
     public Comp extractRange(
         int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
     {    
@@ -53,10 +60,7 @@ public class Comp {
         return new Comp(out);
     }
 
-    // public Ranges extractRanges() {
-
-    // }
-
+        EVENUTALLY MOVE THIS
     private static boolean noteMatchesRange(
         Note n, int minPit, int maxPit, Fraction minTime, Fraction maxTime) 
     {
@@ -81,6 +85,7 @@ public class Comp {
         return n.pitch >= minPit && n.pitch <= maxPit
             && (beginInRange || endInRange);
     }
+    */
 
     public String toUsefulString() 
     {
@@ -93,8 +98,14 @@ public class Comp {
     }
 
     /*
+        ALL OF THE FOLLOWING REGARDS NOTE OVERLAPS.. PROBABLY NOT NECESSARY
+
+
     // Determine if the given note overlaps one in the composition
     // and return a list of them.
+
+        PROBABLY NOT NEEDED
+
     protected List<Note> overlappingList(Note n) {
         List<Note> out = new ArrayList<>();
         for (Note p: notes) {
@@ -148,31 +159,32 @@ public class Comp {
         notes = new TreeSet<>(ns);
     }
     */
-    public Fraction tOnMin() {
+
+    public int tOnMin() {
         List<Note> ns = new ArrayList<>(notes);
         assert (ns.size() > 0);
-        Fraction t = ns.get(0).tOn;
+        int t = ns.get(0).tOn;
         for (int i = 1; i < ns.size(); i++) 
         {
             Note nt = ns.get(i);
-            if (nt.tOn.compareTo(t) < 0)
+            if (nt.tOn < t )
                 t = nt.tOn;
         }
         return t;
     }
 
-    public Fraction tOffMax() {
+    public int tOffMax() {
         List<Note> ns = new ArrayList<>(notes);
         assert (ns.size() > 0);
-        Fraction t = ns.get(0).tOff;
+        int t = ns.get(0).tOff;
         for (int i = 1; i < ns.size(); i++) {
             Note nt = ns.get(i);
-            if (nt.tOff.compareTo(t) > 0)
+            if (nt.tOff > t)
                 t = nt.tOff;
         }
         return t;
     }
-
+    
     public PcsL toPcsL() {
         List<Note> ns = new ArrayList<Note>(notes);
         List<Integer> ls = ns.stream().map(n -> n.pitch).collect(Collectors.toList());
@@ -180,29 +192,13 @@ public class Comp {
         // return new PcsL(new ArrayList<Note>(notes));
     }
 
-    public   ShortMessage[] toMidi(long offset) throws InvalidMidiDataException {
-        int s = notes.size();
-        ShortMessage[] msgs = new ShortMessage[2 * s];
-        int idx = 0;
-        for (Note n: notes) {
-            ShortMessage m1 = new ShortMessage();
-            m1.setMessage(0x90, 1, n.pitch, 64);
-            ShortMessage m2 = new ShortMessage();
-            m2.setMessage(0x80, 1, n.pitch, 64);
-            // make note on and note off
-            msgs[idx++] = m1;
-            msgs[idx++] = m2;
-        }
-        return msgs;
-    }
-
     // how should I test this?
-    public Raw[] toMidi2(long offset) throws InvalidMidiDataException {
+    public Raw[] toMidi(int offset) throws InvalidMidiDataException {
         int s = notes.size();
         Raw[] msgs = new Raw[2 * s];
         int idx = 0;
         for (Note n: notes) {
-            long[] ts = n.onOffTimestamps(offset);
+            int[] ts = n.onOffTimestamps(offset);
             ShortMessage m1 = new ShortMessage();
             m1.setMessage(0x90, 1, n.pitch, 64);
             Raw n1 = new Raw(m1, ts[0]);

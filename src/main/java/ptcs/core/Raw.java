@@ -4,8 +4,8 @@ import javax.sound.midi.*;
 
 public class Raw implements Comparable<Raw> {
     public ShortMessage msg;
-    public long timestamp;
-    public Raw(ShortMessage msg, long timestamp) {
+    public int timestamp;
+    public Raw(ShortMessage msg, int timestamp) {
         this.msg = msg;
         this.timestamp = timestamp;
     }
@@ -19,5 +19,11 @@ public class Raw implements Comparable<Raw> {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public String toString() 
+    {
+        return String.valueOf(timestamp);
     }
 }

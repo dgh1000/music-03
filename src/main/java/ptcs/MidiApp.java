@@ -19,9 +19,9 @@ public class MidiApp {
             throw new Exception("the MMIDI env variable isn't defined");
         List<Integer> pitches = 
             new ArrayList<>(Arrays.asList(60, 64, 67, 72, 76, 79, 84, 88, 91, 96));
-        List<Note> notes = RandomNotes.genRandomNotes(50, 0.2, 0.3, pitches);
+        List<Note> notes = RandomNotes.genRandomNotes(1, 200, 300, pitches);
         MidiInterface.openMidiDevice(midiInputName);
-        MidiInterface.playNotes(notes, new ArrayList<Raw>(), 1000000);
+        MidiInterface.playNotes(notes, new ArrayList<Raw>(), 1000);
         MidiInterface.closeMidiDevice();
 
     }

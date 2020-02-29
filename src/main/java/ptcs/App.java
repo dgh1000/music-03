@@ -33,6 +33,13 @@ import org.apache.commons.math3.fraction.Fraction;
  *   We're not going to analyze comp any more. We're going to have rhythm generator, 
  *   pitch generator, etc. all put together. interfaces
  * 
+ *  Generate... comp? or generate list of pitches. is there anything a comp needs
+ *  besides notes? 
+ * 
+ * So there's a generator function Beat -> a, which can be used for dynamics, 
+ * selection of instruments. One of them is Beat -> next beat. measure map not 
+ * needed initially.
+ * 
  */
 public class App 
 {
@@ -48,7 +55,7 @@ public class App
     {
         Random rand = new Random();
         Comp c = RandomComp.randomComp(
-            10, 20, 90, new Fraction(0.0), new Fraction(10.0), rand
+            10, 20, 90, 0, 10 * 1000, rand
         );
 
         System.out.println(c.toUsefulString());
@@ -64,10 +71,11 @@ public class App
         MyPanel p = GsApp.createAndShowGUI();
         Random rand = new Random(100);
         Comp c = RandomComp.randomComp(
-            10, 30, 70, new Fraction(0), new Fraction(10), rand
+            10, 30, 70, 0, 10 * 1000, rand
         );
         double rangeT0 = 0;
         double rangeT1 = 5;
+        /*
         Comp c2 = c.extractRange(
             50, 70, new Fraction(rangeT0, 0.001, 100), new Fraction(rangeT1, 0.001, 100)
         );
@@ -75,6 +83,7 @@ public class App
         ls.add(new SimpleEntry<>(c, Color.red));
         ls.add(new SimpleEntry<>(c2, Color.black));
         p.setCompList(ls, -1, 11);
+        */
     }
 
     public static void testLibrary()  throws Exception {
